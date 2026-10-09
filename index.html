@@ -1,73 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Office Contact Directory</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123b5d">
+  <meta name="description" content="Bhilwara office contact directory. Search contacts by name, designation or phone number.">
+  <title>Bhilwara Contact Directory</title>
   <style>
-    :root { --primary:#174ea6; --primary-dark:#103b80; --bg:#f4f7fb; --text:#172b4d; --muted:#63738a; --border:#e1e8f0; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--text); background:var(--bg); }
-    header { background:linear-gradient(135deg,var(--primary),#2876cf); color:white; padding:32px 20px 62px; }
-    .header-inner, main { max-width:1120px; margin:0 auto; }
-    .eyebrow { margin:0 0 8px; font-size:12px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; opacity:.85; }
-    h1 { margin:0; font-size:clamp(27px,4vw,38px); }
-    .subtitle { margin:10px 0 0; color:#e5efff; }
-    main { padding:0 20px 40px; margin-top:-34px; }
-    .search-panel { background:white; border:1px solid var(--border); border-radius:14px; padding:20px; box-shadow:0 8px 28px #17365d12; }
-    .search-label { display:block; margin-bottom:10px; font-weight:700; }
-    .search-row { display:flex; gap:10px; }
-    #searchInput { flex:1; min-width:0; padding:14px 15px; border:1px solid #cbd6e3; border-radius:9px; font-size:16px; outline:none; }
-    #searchInput:focus { border-color:var(--primary); box-shadow:0 0 0 3px #174ea61a; }
-    button { border:0; border-radius:9px; background:var(--primary); color:white; padding:0 20px; font-size:15px; font-weight:700; cursor:pointer; }
-    button:hover { background:var(--primary-dark); }
-    .helper { color:var(--muted); font-size:13px; margin:10px 0 0; }
-    .results-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:24px 2px 12px; }
-    .results-head h2 { margin:0; font-size:20px; }
-    #resultCount { color:var(--muted); font-size:14px; }
-    .table-wrap { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:0 3px 12px #17365d08; }
-    table { width:100%; border-collapse:collapse; }
-    thead { background:#edf3fb; }
-    th,td { text-align:left; padding:15px 16px; border-bottom:1px solid var(--border); vertical-align:middle; }
-    th { font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:#455a76; }
-    td { font-size:14px; }
-    tbody tr:last-child td { border-bottom:0; }
-    tbody tr:hover { background:#f8fbff; }
-    .person { font-weight:700; }
-    .designation { color:#455a76; }
-    a.phone { color:var(--primary); text-decoration:none; white-space:nowrap; }
-    a.phone:hover { text-decoration:underline; }
-    .empty { display:none; text-align:center; padding:38px 18px; color:var(--muted); }
-    footer { text-align:center; color:var(--muted); font-size:12px; padding:0 20px 28px; }
-    @media (max-width:760px) {
-      header { padding-bottom:54px; }
-      main { padding:0 12px 28px; }
-      .search-panel { padding:15px; }
-      .search-row { flex-direction:column; }
-      button { padding:13px; }
-      .table-wrap { overflow-x:auto; }
-      table { min-width:700px; }
-      th,td { padding:13px 12px; }
+    :root {
+      --navy: #123b5d;
+      --blue: #176b87;
+      --teal: #16877b;
+      --ink: #183247;
+      --muted: #637789;
+      --line: #dce7ee;
+      --paper: #ffffff;
+      --page: #f2f7fa;
     }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; color: var(--ink);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: radial-gradient(ellipse at top right, #e0f4f1 0, transparent 38%), var(--page);
+    }
+    .hero {
+      color: white; position: relative; overflow: hidden;
+      padding: 30px 20px 76px;
+      background: linear-gradient(125deg, #102f4c 0%, #155b78 62%, #16877b 100%);
+    }
+    .hero::after {
+      content: ""; position: absolute; width: 330px; height: 330px; border-radius: 50%;
+      border: 1px solid #ffffff24; right: -90px; top: -145px;
+      box-shadow: 0 0 0 34px #ffffff0c, 0 0 0 70px #ffffff08;
+    }
+    .hero-inner, main, footer { max-width: 1180px; margin: 0 auto; }
+    .brand { display: flex; gap: 16px; align-items: center; position: relative; z-index: 1; }
+    .brand-mark {
+      display: grid; place-items: center; width: 64px; height: 64px; flex: 0 0 64px;
+      border-radius: 19px; background: #ffffff18; border: 1px solid #ffffff45;
+      box-shadow: inset 0 1px 0 #ffffff20;
+    }
+    .brand-mark svg { width: 36px; height: 36px; }
+    .eyebrow { margin: 0 0 6px; color: #c7eee9; font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    h1 { font-size: clamp(27px, 4vw, 40px); letter-spacing: -.7px; line-height: 1.1; margin: 0; }
+    .subtitle { color: #e2f2f7; margin: 10px 0 0; font-size: 15px; }
+    .location-chip {
+      display: inline-flex; align-items: center; gap: 7px; margin-top: 18px;
+      padding: 7px 11px; border: 1px solid #ffffff35; background: #ffffff12;
+      border-radius: 999px; color: white; font-size: 12px; font-weight: 700;
+    }
+    main { padding: 0 20px 44px; margin-top: -42px; position: relative; z-index: 2; }
+    .search-panel {
+      background: var(--paper); border: 1px solid #dbe7ed; border-radius: 20px;
+      padding: 23px; box-shadow: 0 16px 42px #173c5612;
+    }
+    .search-label { display: block; font-weight: 800; font-size: 15px; margin-bottom: 12px; }
+    .search-row { display: flex; gap: 10px; }
+    .search-box { position: relative; flex: 1; min-width: 0; }
+    .search-box svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: #78909f; }
+    #searchInput {
+      width: 100%; padding: 15px 16px 15px 45px; border: 1px solid #cbdbe4;
+      border-radius: 12px; font-size: 15px; color: var(--ink); background: #fbfdfe; outline: none;
+    }
+    #searchInput:focus { border-color: var(--teal); box-shadow: 0 0 0 4px #16877b1c; }
+    button { cursor: pointer; font: inherit; }
+    #clearButton { border: 0; border-radius: 12px; padding: 0 19px; background: #e8f4f3; color: #12695f; font-weight: 800; }
+    #clearButton:hover { background: #d6ece9; }
+    .helper { margin: 11px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+    .results-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 27px 2px 14px; }
+    .results-head h2 { margin: 0; font-size: 21px; letter-spacing: -.3px; }
+    #resultCount { color: #496578; background: #e2edf3; border-radius: 999px; padding: 7px 12px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .contact-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .contact-card {
+      min-width: 0; position: relative; overflow: hidden; background: white;
+      border: 1px solid var(--line); border-radius: 17px; padding: 19px;
+      box-shadow: 0 5px 18px #183d5408; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .contact-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(var(--teal), #55b6b1); }
+    .contact-card:hover { transform: translateY(-3px); border-color: #b8d7dc; box-shadow: 0 12px 28px #183d5414; }
+    .person-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 17px; }
+    .avatar {
+      width: 46px; height: 46px; flex: 0 0 46px; display: grid; place-items: center;
+      border-radius: 14px; background: linear-gradient(145deg, #e3f5f2, #e7f0fb);
+      color: #176b78; font-size: 15px; font-weight: 900; letter-spacing: .4px;
+    }
+    .person-info { min-width: 0; }
+    .person-name { font-size: 16px; line-height: 1.35; font-weight: 850; overflow-wrap: anywhere; margin: 1px 0 5px; }
+    .designation { color: var(--muted); font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+    .detail-label { color: #748999; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 7px; }
+    .phone-line { display: flex; align-items: center; justify-content: space-between; gap: 9px; padding: 11px 0; border-top: 1px solid #edf2f5; }
+    .phone-copy { min-width: 0; }
+    .phone-number { font-size: 13px; font-weight: 750; color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+    .phone-number:hover { color: var(--blue); text-decoration: underline; }
+    .phone-type { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .call-button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      min-height: 37px; padding: 0 12px; flex-shrink: 0; border-radius: 10px;
+      color: white; background: var(--teal); text-decoration: none; font-size: 12px; font-weight: 850;
+      box-shadow: 0 3px 8px #16877b25;
+    }
+    .call-button:hover { background: #106e65; }
+    .call-button svg { width: 15px; height: 15px; }
+    .no-number { font-size: 13px; color: #98a8b3; font-style: italic; }
+    .empty { display: none; padding: 44px 20px; text-align: center; background: white; border: 1px dashed #c8d9e2; border-radius: 17px; color: var(--muted); }
+    .empty svg { width: 32px; height: 32px; margin-bottom: 10px; color: #7d9eaa; }
+    footer { padding: 0 20px 28px; text-align: center; color: #708391; font-size: 12px; }
+    footer strong { color: #426174; }
+    @media (max-width: 950px) { .contact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 600px) {
+      .hero { padding: 24px 16px 68px; }
+      .brand { gap: 12px; }
+      .brand-mark { width: 54px; height: 54px; flex-basis: 54px; border-radius: 15px; }
+      .brand-mark svg { width: 30px; height: 30px; }
+      .subtitle { font-size: 13px; line-height: 1.45; }
+      main { padding: 0 12px 30px; }
+      .search-panel { padding: 17px; border-radius: 16px; }
+      .search-row { flex-direction: column; }
+      #searchInput { font-size: 16px; }
+      #clearButton { padding: 12px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 12px; }
+      .contact-card { padding: 17px; }
+      .results-head { margin-top: 23px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <p class="eyebrow">Office Information</p>
-      <h1>Contact Directory</h1>
-      <p class="subtitle">Find the right person and contact number quickly.</p>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="5" width="38" height="38" rx="12" stroke="white" stroke-width="2"/>
+            <path d="M17 12.5c-1.4 0-2.5 1.1-2.5 2.5v18c0 1.4 1.1 2.5 2.5 2.5h14c1.4 0 2.5-1.1 2.5-2.5V15c0-1.4-1.1-2.5-2.5-2.5H17Z" stroke="white" stroke-width="2.2"/>
+            <path d="M20 17h8M20 22h8M20 27h4" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="30.5" cy="31.5" r="6.5" fill="#16877b" stroke="white" stroke-width="2"/>
+            <path d="M28.3 29.2c.3-.3.7-.3 1 0l.7.9c.2.2.2.5 0 .8l-.4.5c.5 1 1.3 1.7 2.2 2.2l.5-.4c.2-.2.6-.2.8 0l.9.7c.3.3.3.7 0 1l-.5.5c-.5.5-1.3.6-2 .3-2.2-.9-4.1-2.8-5-5-.3-.7-.2-1.5.3-2l.5-.5Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <p class="eyebrow">Office Information Portal</p>
+          <h1>Bhilwara Contact Directory</h1>
+          <p class="subtitle">Find the right office contact quickly and connect with one tap.</p>
+          <div class="location-chip">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+            Bhilwara, Rajasthan
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="search-panel" aria-label="Search contacts">
-      <label class="search-label" for="searchInput">Search by name, designation or phone number</label>
+      <label class="search-label" for="searchInput">Search the directory</label>
       <div class="search-row">
-        <input id="searchInput" type="search" placeholder="e.g. Amit Sharma, Accountant, 98765..." autocomplete="off" />
-        <button id="clearButton" type="button">Clear Search</button>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="2"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="searchInput" type="search" placeholder="Search name, designation or phone number…" autocomplete="off" aria-label="Search by name, designation or phone number">
+        </div>
+        <button id="clearButton" type="button">Clear search</button>
       </div>
-      <p class="helper">Search updates the directory automatically. Phone numbers are clickable on compatible devices.</p>
+      <p class="helper">Search results update as you type. Tap a phone number or the green Call button to dial from a compatible mobile device.</p>
     </section>
 
     <div class="results-head">
@@ -75,22 +169,19 @@
       <span id="resultCount" aria-live="polite">0 contacts</span>
     </div>
 
-    <section class="table-wrap" aria-label="Contact list">
-      <table>
-        <thead>
-          <tr><th>Name</th><th>Designation</th><th>Mobile No.</th><th>Office No.</th></tr>
-        </thead>
-        <tbody id="contactRows"></tbody>
-      </table>
-      <div id="emptyMessage" class="empty">No contacts found. Try another name, designation or number.</div>
-    </section>
+    <section id="contactGrid" class="contact-grid" aria-label="Contact cards"></section>
+    <div id="emptyMessage" class="empty" role="status">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <div><strong>No contacts found</strong></div>
+      <div style="margin-top:5px">Try another name, designation or number.</div>
+    </div>
   </main>
 
-  <footer>Office Contact Directory</footer>
+  <footer><strong>Bhilwara Contact Directory</strong> · Office information portal</footer>
 
   <script>
-    // Replace these sample records with your actual contacts.
-    // Keep phone numbers as strings so leading zeroes are preserved.
+    // Replace these demonstration records with approved, current office contacts.
+    // Keep phone numbers as strings to preserve leading zeroes.
     const contacts = [
       { name: "Amit Sharma", designation: "District Officer", mobile: "9876543210", office: "01482-240001" },
       { name: "Neha Verma", designation: "Assistant Director", mobile: "9876543211", office: "01482-240002" },
@@ -100,7 +191,7 @@
     ];
 
     const searchInput = document.getElementById("searchInput");
-    const contactRows = document.getElementById("contactRows");
+    const contactGrid = document.getElementById("contactGrid");
     const resultCount = document.getElementById("resultCount");
     const emptyMessage = document.getElementById("emptyMessage");
 
@@ -110,12 +201,32 @@
       })[char]);
     }
 
-    function phoneLink(number) {
+    function dialHref(number) {
+      // The tel: link asks the device to open its phone/dialer app.
+      return "tel:" + String(number ?? "").replace(/[^\d+]/g, "");
+    }
+
+    function phoneSection(label, number) {
+      if (!number || !String(number).trim()) {
+        return `<div class="phone-line"><div class="phone-copy"><div class="detail-label">${label}</div><span class="no-number">Not available</span></div></div>`;
+      }
       const safeNumber = escapeHtml(number);
-      const dialNumber = String(number).replace(/[^\d+]/g, "");
-      return number
-        ? `<a class="phone" href="tel:${escapeHtml(dialNumber)}">${safeNumber}</a>`
-        : "—";
+      const href = escapeHtml(dialHref(number));
+      return `
+        <div class="phone-line">
+          <div class="phone-copy">
+            <div class="detail-label">${label}</div>
+            <a class="phone-number" href="${href}" aria-label="Call ${label.toLowerCase()} ${safeNumber}">${safeNumber}</a>
+          </div>
+          <a class="call-button" href="${href}" aria-label="Call ${label.toLowerCase()} ${safeNumber}">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 16.4v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.1 3.7 2 2 0 0 1 3.1 1.5h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L7 9.5a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Call
+          </a>
+        </div>`;
+    }
+
+    function initials(name) {
+      return String(name ?? "").trim().split(/\s+/).slice(0, 2).map(part => part[0] || "").join("").toLocaleUpperCase();
     }
 
     function renderContacts() {
@@ -125,18 +236,23 @@
           .some(value => String(value ?? "").toLocaleLowerCase().includes(query))
       );
 
-      contactRows.innerHTML = filtered.map(contact => `
-        <tr>
-          <td class="person">${escapeHtml(contact.name)}</td>
-          <td class="designation">${escapeHtml(contact.designation)}</td>
-          <td>${phoneLink(contact.mobile)}</td>
-          <td>${phoneLink(contact.office)}</td>
-        </tr>
+      contactGrid.innerHTML = filtered.map(contact => `
+        <article class="contact-card">
+          <div class="person-row">
+            <div class="avatar" aria-hidden="true">${escapeHtml(initials(contact.name))}</div>
+            <div class="person-info">
+              <div class="person-name">${escapeHtml(contact.name)}</div>
+              <div class="designation">${escapeHtml(contact.designation)}</div>
+            </div>
+          </div>
+          ${phoneSection("Mobile number", contact.mobile)}
+          ${phoneSection("Office number", contact.office)}
+        </article>
       `).join("");
 
       resultCount.textContent = `${filtered.length} contact${filtered.length === 1 ? "" : "s"}`;
       emptyMessage.style.display = filtered.length ? "none" : "block";
-      document.querySelector("table").style.display = filtered.length ? "table" : "none";
+      contactGrid.style.display = filtered.length ? "grid" : "none";
     }
 
     searchInput.addEventListener("input", renderContacts);
