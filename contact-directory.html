@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Office Contact Directory</title>
+  <style>
+    :root { --primary:#174ea6; --primary-dark:#103b80; --bg:#f4f7fb; --text:#172b4d; --muted:#63738a; --border:#e1e8f0; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; color:var(--text); background:var(--bg); }
+    header { background:linear-gradient(135deg,var(--primary),#2876cf); color:white; padding:32px 20px 62px; }
+    .header-inner, main { max-width:1120px; margin:0 auto; }
+    .eyebrow { margin:0 0 8px; font-size:12px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; opacity:.85; }
+    h1 { margin:0; font-size:clamp(27px,4vw,38px); }
+    .subtitle { margin:10px 0 0; color:#e5efff; }
+    main { padding:0 20px 40px; margin-top:-34px; }
+    .search-panel { background:white; border:1px solid var(--border); border-radius:14px; padding:20px; box-shadow:0 8px 28px #17365d12; }
+    .search-label { display:block; margin-bottom:10px; font-weight:700; }
+    .search-row { display:flex; gap:10px; }
+    #searchInput { flex:1; min-width:0; padding:14px 15px; border:1px solid #cbd6e3; border-radius:9px; font-size:16px; outline:none; }
+    #searchInput:focus { border-color:var(--primary); box-shadow:0 0 0 3px #174ea61a; }
+    button { border:0; border-radius:9px; background:var(--primary); color:white; padding:0 20px; font-size:15px; font-weight:700; cursor:pointer; }
+    button:hover { background:var(--primary-dark); }
+    .helper { color:var(--muted); font-size:13px; margin:10px 0 0; }
+    .results-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:24px 2px 12px; }
+    .results-head h2 { margin:0; font-size:20px; }
+    #resultCount { color:var(--muted); font-size:14px; }
+    .table-wrap { background:white; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:0 3px 12px #17365d08; }
+    table { width:100%; border-collapse:collapse; }
+    thead { background:#edf3fb; }
+    th,td { text-align:left; padding:15px 16px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    th { font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:#455a76; }
+    td { font-size:14px; }
+    tbody tr:last-child td { border-bottom:0; }
+    tbody tr:hover { background:#f8fbff; }
+    .person { font-weight:700; }
+    .designation { color:#455a76; }
+    a.phone { color:var(--primary); text-decoration:none; white-space:nowrap; }
+    a.phone:hover { text-decoration:underline; }
+    .empty { display:none; text-align:center; padding:38px 18px; color:var(--muted); }
+    footer { text-align:center; color:var(--muted); font-size:12px; padding:0 20px 28px; }
+    @media (max-width:760px) {
+      header { padding-bottom:54px; }
+      main { padding:0 12px 28px; }
+      .search-panel { padding:15px; }
+      .search-row { flex-direction:column; }
+      button { padding:13px; }
+      .table-wrap { overflow-x:auto; }
+      table { min-width:700px; }
+      th,td { padding:13px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <p class="eyebrow">Office Information</p>
+      <h1>Contact Directory</h1>
+      <p class="subtitle">Find the right person and contact number quickly.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="search-panel" aria-label="Search contacts">
+      <label class="search-label" for="searchInput">Search by name, designation or phone number</label>
+      <div class="search-row">
+        <input id="searchInput" type="search" placeholder="e.g. Amit Sharma, Accountant, 98765..." autocomplete="off" />
+        <button id="clearButton" type="button">Clear Search</button>
+      </div>
+      <p class="helper">Search updates the directory automatically. Phone numbers are clickable on compatible devices.</p>
+    </section>
+
+    <div class="results-head">
+      <h2>Office Contacts</h2>
+      <span id="resultCount" aria-live="polite">0 contacts</span>
+    </div>
+
+    <section class="table-wrap" aria-label="Contact list">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Designation</th><th>Mobile No.</th><th>Office No.</th></tr>
+        </thead>
+        <tbody id="contactRows"></tbody>
+      </table>
+      <div id="emptyMessage" class="empty">No contacts found. Try another name, designation or number.</div>
+    </section>
+  </main>
+
+  <footer>Office Contact Directory</footer>
+
+  <script>
+    // Replace these sample records with your actual contacts.
+    // Keep phone numbers as strings so leading zeroes are preserved.
+    const contacts = [
+      { name: "Amit Sharma", designation: "District Officer", mobile: "9876543210", office: "01482-240001" },
+      { name: "Neha Verma", designation: "Assistant Director", mobile: "9876543211", office: "01482-240002" },
+      { name: "Rajesh Singh", designation: "Accounts Officer", mobile: "9876543212", office: "01482-240003" },
+      { name: "Priya Joshi", designation: "Office Superintendent", mobile: "9876543213", office: "01482-240004" },
+      { name: "Mohit Jain", designation: "Data Entry Operator", mobile: "9876543214", office: "01482-240005" }
+    ];
+
+    const searchInput = document.getElementById("searchInput");
+    const contactRows = document.getElementById("contactRows");
+    const resultCount = document.getElementById("resultCount");
+    const emptyMessage = document.getElementById("emptyMessage");
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function phoneLink(number) {
+      const safeNumber = escapeHtml(number);
+      const dialNumber = String(number).replace(/[^\d+]/g, "");
+      return number
+        ? `<a class="phone" href="tel:${escapeHtml(dialNumber)}">${safeNumber}</a>`
+        : "—";
+    }
+
+    function renderContacts() {
+      const query = searchInput.value.trim().toLocaleLowerCase();
+      const filtered = contacts.filter(contact =>
+        [contact.name, contact.designation, contact.mobile, contact.office]
+          .some(value => String(value ?? "").toLocaleLowerCase().includes(query))
+      );
+
+      contactRows.innerHTML = filtered.map(contact => `
+        <tr>
+          <td class="person">${escapeHtml(contact.name)}</td>
+          <td class="designation">${escapeHtml(contact.designation)}</td>
+          <td>${phoneLink(contact.mobile)}</td>
+          <td>${phoneLink(contact.office)}</td>
+        </tr>
+      `).join("");
+
+      resultCount.textContent = `${filtered.length} contact${filtered.length === 1 ? "" : "s"}`;
+      emptyMessage.style.display = filtered.length ? "none" : "block";
+      document.querySelector("table").style.display = filtered.length ? "table" : "none";
+    }
+
+    searchInput.addEventListener("input", renderContacts);
+    document.getElementById("clearButton").addEventListener("click", () => {
+      searchInput.value = "";
+      renderContacts();
+      searchInput.focus();
+    });
+
+    renderContacts();
+  </script>
+</body>
+</html>
